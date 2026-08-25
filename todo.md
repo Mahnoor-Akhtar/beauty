@@ -74,3 +74,15 @@
 - [x] Upload all uploaded assets with public access.
 - [x] Replace Manus-only storage paths with public URLs.
 - [x] Verify public asset reachability and the Vercel-ready production build.
+
+## Comparison full-frame fix
+
+- [ ] Keep the no-makeup image at full comparison width and height.
+- [ ] Clip the Before layer horizontally instead of resizing its frame.
+- [ ] Verify top and bottom spacing on desktop and mobile, then save a checkpoint.
+
+## Left-edge comparison adjustment
+
+- [x] Make the no-makeup Before layer flush with the left edge.
+- [x] Preserve full-height, gap-free framing while the divider moves.
+- [x] Verify desktop and mobile comparison framing, then save a checkpoint.

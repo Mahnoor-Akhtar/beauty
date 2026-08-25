@@ -220,7 +220,7 @@ h1 i, h2 i, h3 i, strong i { font-weight: 400; }
 .comparison img { width: 100%; height: 100%; object-fit: contain; }
 .comparison-after, .comparison-before { position: absolute; inset: 0; overflow: hidden; }
 .comparison-before { z-index: 2; border-right: 0; }
-.comparison-before img { width: 100%; max-width: none; object-fit: contain; }
+.comparison-before img { width: 100%; max-width: none; object-fit: contain; object-position: left center; }
 .comparison-line { position: absolute; z-index: 4; top: 0; bottom: 0; width: 1px; background: var(--white); transform: translateX(-.5px); pointer-events: none; }
 .comparison-line span { width: 38px; height: 38px; position: absolute; top: calc(50% - 19px); left: -19px; display: flex; align-items: center; justify-content: center; background: var(--white); color: var(--ink); border-radius: 50%; box-shadow: 0 4px 15px rgba(45,34,31,.18); }
 .comparison-range { position: absolute; z-index: 5; inset: 0; width: 100%; height: 100%; appearance: none; background: transparent; cursor: ew-resize; }
@@ -487,6 +487,7 @@ h1 i, h2 i, h3 i, strong i { font-weight: 400; }
   .why-list { margin-top: 65px; }
   .comparison { aspect-ratio: .8; }
   .comparison img { object-position: center; }
+  .comparison-before img { object-position: left center; }
   .gallery-masonry { columns: 2 130px; column-gap: 9px; }
   .gallery-item { margin-bottom: 9px; }
   .gallery-hover { inset-inline: 9px; bottom: 9px; font-size: 17px; }
