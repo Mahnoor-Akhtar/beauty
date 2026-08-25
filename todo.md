@@ -86,3 +86,16 @@
 - [x] Make the no-makeup Before layer flush with the left edge.
 - [x] Preserve full-height, gap-free framing while the divider moves.
 - [x] Verify desktop and mobile comparison framing, then save a checkpoint.
+
+## Vercel production readiness
+
+- [x] Audit framework, scripts, dependencies, environment usage, routing, and ignore rules.
+- [x] Determine whether Vercel configuration is required and apply only necessary fixes.
+- [x] Verify public assets, type-check, production build, and runtime hosting assumptions.
+- [x] Document changed files, exact Vercel settings, environment variables, commands, and post-deployment checks.
+
+## Vercel server path correction
+
+- [x] Separate the Vercel static build from the optional Express server bundle.
+- [x] Make server static-path resolution robust for local production preview.
+- [x] Verify the static output and server path behavior, then save a checkpoint.

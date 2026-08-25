@@ -1,5 +1,6 @@
 import express from "express";
 import { createServer } from "http";
+import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -10,11 +11,14 @@ async function startServer() {
   const app = express();
   const server = createServer(app);
 
-  // Serve static files from dist/public in production
+  // Resolve the Vite output whether this file runs from dist/index.js or server/index.ts.
+  const staticPathCandidates = [
+    path.resolve(__dirname, "public"),
+    path.resolve(__dirname, "..", "dist", "public"),
+  ];
   const staticPath =
-    process.env.NODE_ENV === "production"
-      ? path.resolve(__dirname, "public")
-      : path.resolve(__dirname, "..", "dist", "public");
+    staticPathCandidates.find((candidate) => fs.existsSync(path.join(candidate, "index.html"))) ??
+    staticPathCandidates[1];
 
   app.use(express.static(staticPath));
 
