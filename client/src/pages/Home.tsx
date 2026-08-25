@@ -1,25 +1,213 @@
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { Streamdown } from 'streamdown';
-
-/**
- * All content in this page are only for example, replace with your own feature implementation
- * When building pages, remember your instructions in Frontend Best Practices, Design Guide and Common Pitfalls
+/*
+ * Atelier Beauty / Quiet Luxury Editorial
+ * This page uses warm paper surfaces, cacao ink, antique brass micro-labels,
+ * offset editorial layouts, and calm concierge-like interactions.
  */
+import { useEffect, useMemo, useState } from "react";
+import {
+  ArrowDown,
+  ArrowRight,
+  ArrowUp,
+  ArrowUpRight,
+  CalendarDays,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Clock3,
+  Instagram,
+  Mail,
+  MapPin,
+  Menu,
+  Minus,
+  Phone,
+  Plus,
+  Sparkles,
+  X,
+} from "lucide-react";
+
+type Service = {
+  id: string;
+  category: string;
+  title: string;
+  description: string;
+  duration: string;
+  price: string;
+  image: string;
+  benefits: string[];
+  preparation: string;
+};
+
+const img = (id: string, width = 1200) =>
+  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=88`;
+
+const generated = {
+  hero: "/manus-storage/atelier-hero_611faae1.jpg",
+  studio: "/manus-storage/atelier-studio_e70f81a9.jpg",
+  bridal: "/manus-storage/atelier-bridal_ddf7aa9e.jpg",
+  ritual: "/manus-storage/atelier-ritual_e6b9ec5c.jpg",
+  mark: "/manus-storage/atelier-mark_7ebe9464.png",
+};
+
+const services: Service[] = [
+  { id: "haircut", category: "Hair", title: "Haircut & Styling", description: "Precision cuts and personalized styling designed around your features and lifestyle.", duration: "45–60 min", price: "From $68", image: img("photo-1522337360788-8b13dee7a37e"), benefits: ["Face-framing consultation", "Signature finish", "At-home styling notes"], preparation: "Arrive with clean, detangled hair if possible." },
+  { id: "color", category: "Hair", title: "Hair Coloring", description: "Professional color treatments with customized tones, highlights and finishing.", duration: "2–3 hrs", price: "From $165", image: img("photo-1521590832167-7bcbfaa6381f"), benefits: ["Tone mapping", "Bond-protect treatment", "Gloss finish"], preparation: "Bring reference images and avoid washing for 24 hours." },
+  { id: "balayage", category: "Hair", title: "Highlights & Balayage", description: "Soft, natural-looking dimension with seamless color transitions.", duration: "3–4 hrs", price: "From $220", image: img("photo-1500840216050-6ffa99d75160"), benefits: ["Custom placement", "Soft grow-out", "Toning gloss"], preparation: "A short consultation helps us map your ideal lightness." },
+  { id: "treatment", category: "Hair", title: "Hair Treatment", description: "Deep-conditioning and restorative treatments for softer, healthier-looking hair.", duration: "45 min", price: "From $82", image: img("photo-1516975080664-ed2fc6a32937"), benefits: ["Scalp massage", "Repair mask", "Silk press finish"], preparation: "No special preparation required." },
+  { id: "blowout", category: "Hair", title: "Blow Dry & Styling", description: "A polished, touchable blowout with the right amount of movement.", duration: "45–75 min", price: "From $55", image: img("photo-1524250502761-1ac6f2e30d43"), benefits: ["Heat protect ritual", "Long-wear finish", "Optional waves"], preparation: "Best on freshly washed or lightly product-free hair." },
+  { id: "signature-facial", category: "Skin", title: "Signature Facial", description: "A considered reset for skin that looks rested, luminous and beautifully cared for.", duration: "75 min", price: "From $125", image: generated.ritual, benefits: ["Double cleanse", "Custom mask", "Neck and shoulder massage"], preparation: "Pause active exfoliants 48 hours before your visit." },
+  { id: "deep-cleanse", category: "Skin", title: "Deep Cleansing Facial", description: "Purifying care that clears the surface while keeping the skin feeling calm.", duration: "60 min", price: "From $98", image: img("photo-1556229010-aa3f7ff2472e"), benefits: ["Gentle extractions", "Balancing mask", "Cooling finish"], preparation: "Please arrive without makeup if convenient." },
+  { id: "hydrating", category: "Skin", title: "Hydrating Facial", description: "A cushion-soft infusion of moisture for skin that feels supple and refreshed.", duration: "60 min", price: "From $110", image: img("photo-1610992015732-2449b76344bc"), benefits: ["Hydration mapping", "Cooling globes", "Barrier support"], preparation: "Avoid a new skincare product in the 24 hours before." },
+  { id: "anti-aging", category: "Skin", title: "Age-Defying Ritual", description: "Toning and replenishing care designed to bring back a rested, lifted glow.", duration: "90 min", price: "From $150", image: img("photo-1556228720-195a672e8a03"), benefits: ["Lifting massage", "Peptide mask", "SPF finish"], preparation: "Tell us about any recent treatments during booking." },
+  { id: "soft-glam", category: "Makeup", title: "Soft Glam", description: "A modern, luminous look that reads polished in person and effortless in photographs.", duration: "75 min", price: "From $125", image: img("photo-1515886657613-9f3515b0c78f"), benefits: ["Skin-prep ritual", "Custom complexion", "Lash placement"], preparation: "Arrive with clean, moisturized skin." },
+  { id: "party", category: "Makeup", title: "Party Makeup", description: "A confident evening look with softly sculpted definition and lasting comfort.", duration: "90 min", price: "From $145", image: img("photo-1524504388940-b1c1722653e1"), benefits: ["Long-wear base", "Eye design", "Lip pairing"], preparation: "Bring your outfit colors or a reference look if you have one." },
+  { id: "hd", category: "Makeup", title: "HD Makeup", description: "Camera-ready artistry with a natural finish that holds beautifully under lights.", duration: "90 min", price: "From $165", image: img("photo-1534528741775-53994a69daeb"), benefits: ["HD complexion", "Seamless blending", "Touch-up kit"], preparation: "Schedule a trial for important shoots or events." },
+  { id: "bridal-makeup", category: "Bridal", title: "Bridal Makeup", description: "Bridal beauty created around you, your dress, your rituals and your day.", duration: "2 hrs", price: "From $260", image: generated.bridal, benefits: ["Design consultation", "Trial available", "Touch-up guidance"], preparation: "A consultation is recommended before reserving your date." },
+  { id: "bridal-hair", category: "Bridal", title: "Bridal Hair", description: "A considered bridal shape with softness, structure and staying power.", duration: "2 hrs", price: "From $240", image: img("photo-1516975080664-ed2fc6a32937"), benefits: ["Veil placement", "Style mapping", "Finishing pins"], preparation: "Bring your veil, jewelry, and preferred parting references." },
+  { id: "bridal-package", category: "Bridal", title: "Complete Bridal Package", description: "A calm, unhurried beauty plan for the most photographed morning of your life.", duration: "4–5 hrs", price: "From $520", image: img("photo-1529139574466-a303027c1d8b"), benefits: ["Hair and makeup", "Trial consultation", "Touch-up kit"], preparation: "Reserve early so we can shape the morning around your schedule." },
+  { id: "manicure", category: "Nails", title: "Classic Manicure", description: "Thoughtful shaping, cuticle care and a polished finish in your chosen tone.", duration: "45 min", price: "From $48", image: img("photo-1512496015851-a90fb38ba796"), benefits: ["Shape consultation", "Cuticle care", "Polish finish"], preparation: "Please remove existing gel if you need a new shape." },
+  { id: "gel", category: "Nails", title: "Gel Manicure", description: "Clean, glossy color with a beautiful finish that fits real life.", duration: "60 min", price: "From $72", image: img("photo-1525507119028-ed4c629a60a3"), benefits: ["Soak-off care", "Strengthening base", "Gloss finish"], preparation: "Avoid picking or peeling existing product before your visit." },
+  { id: "nail-art", category: "Nails", title: "Nail Art", description: "Small, expressive details designed to feel personal rather than predictable.", duration: "75 min", price: "From $85", image: img("photo-1515377905703-c4788e51af15"), benefits: ["Reference consult", "Hand-painted detail", "Protective top coat"], preparation: "Send references ahead so we can prepare the right palette." },
+  { id: "pedicure", category: "Nails", title: "Spa Pedicure", description: "A restorative foot ritual with softening care, massage and a clean finish.", duration: "60 min", price: "From $78", image: img("photo-1551836022-d5d88e9218df"), benefits: ["Soak and exfoliation", "Foot massage", "Polish finish"], preparation: "Open-toe shoes make the finish easier to protect." },
+  { id: "massage", category: "Spa", title: "Relaxation Massage", description: "Slow, grounding bodywork to help the day soften around you.", duration: "60 min", price: "From $115", image: generated.ritual, benefits: ["Aromatherapy option", "Custom pressure", "Quiet room"], preparation: "Arrive 10 minutes early to settle in." },
+  { id: "head-massage", category: "Spa", title: "Head Massage", description: "A quiet release for the scalp, temples, neck and shoulders.", duration: "30 min", price: "From $58", image: img("photo-1600334089648-b0d9d3028eb2"), benefits: ["Scalp oil ritual", "Neck release", "Warm towel"], preparation: "Wear a comfortable neckline." },
+  { id: "aromatherapy", category: "Spa", title: "Aromatherapy Ritual", description: "A sensory pause built around warm oils, unhurried touch and deep exhale.", duration: "75 min", price: "From $135", image: img("photo-1540555700478-4be289fbecef"), benefits: ["Scent consultation", "Full-body ritual", "Herbal tea"], preparation: "Let us know about any fragrance sensitivities." },
+];
+
+const gallery = [
+  { src: generated.studio, label: "The studio", tall: true },
+  { src: img("photo-1524504388940-b1c1722653e1"), label: "Soft glam" },
+  { src: img("photo-1515377905703-c4788e51af15"), label: "Nail detail", tall: true },
+  { src: generated.bridal, label: "Bridal morning" },
+  { src: img("photo-1534528741775-53994a69daeb"), label: "A quiet glow", tall: true },
+  { src: img("photo-1522337360788-8b13dee7a37e"), label: "Hair ritual" },
+  { src: img("photo-1556229010-aa3f7ff2472e"), label: "Skin care" },
+  { src: img("photo-1506794778202-cad84cf45f1d"), label: "In the studio", tall: true },
+  { src: img("photo-1544005313-94ddf0286df2"), label: "The finishing touch" },
+  { src: img("photo-1526045478516-99145907023c"), label: "Bridal detail", tall: true },
+  { src: img("photo-1529139574466-a303027c1d8b"), label: "Before the ceremony" },
+  { src: generated.ritual, label: "The ritual" },
+];
+
+const categories = ["All", "Hair", "Skin", "Makeup", "Bridal", "Nails", "Spa"];
+const navItems = ["About", "Services", "Gallery", "Bridal", "Our Team", "Contact"];
+
+function Reveal({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
+  return <div className={`reveal ${className}`} style={{ "--delay": `${delay}ms` } as React.CSSProperties}>{children}</div>;
+}
+
 export default function Home() {
-  // If theme is switchable in App.tsx, we can implement theme toggling like this:
-  // const { theme, toggleTheme } = useTheme();
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [beforePosition, setBeforePosition] = useState(54);
+  const [submitted, setSubmitted] = useState(false);
+  const [testimonialIndex, setTestimonialIndex] = useState(0);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
+      if (entry.isIntersecting) entry.target.classList.add("is-visible");
+    }), { threshold: 0.12 });
+    document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
+    return () => observer.disconnect();
+  }, []);
+
+  const filteredServices = useMemo(() => selectedCategory === "All" ? services : services.filter((service) => service.category === selectedCategory), [selectedCategory]);
+  const lightboxItem = lightboxIndex === null ? null : gallery[lightboxIndex];
+  const featuredServices = services.filter((service) => service.category === "Hair").slice(0, 3);
+  const skinServices = services.filter((service) => service.category === "Skin").slice(0, 3);
+  const makeupServices = services.filter((service) => service.category === "Makeup").slice(0, 3);
+
+  const scrollTo = (id: string) => {
+    setMobileOpen(false);
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const openBooking = (service?: Service) => {
+    if (service) setSelectedService(service);
+    scrollTo("booking");
+  };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="site-shell">
+      <div className="announcement"><span>New clients — enjoy 15% off your first visit</span><button onClick={() => openBooking()} aria-label="Book your first visit">Book now <ArrowRight size={13} /></button></div>
+      <header className={`site-header ${scrolled ? "is-scrolled" : ""}`}>
+        <button className="brand-lockup" onClick={() => scrollTo("home")} aria-label="Atelier Beauty home"><img src={generated.mark} alt="" /><span>ATELIER<br /><em>BEAUTY</em></span></button>
+        <nav className="desktop-nav" aria-label="Primary navigation">
+          <button onClick={() => scrollTo("home")}>Home</button>
+          {navItems.map((item) => <button key={item} onClick={() => scrollTo(item === "Our Team" ? "team" : item.toLowerCase())}>{item}</button>)}
+        </nav>
+        <button className="header-cta" onClick={() => openBooking()}>Book appointment <ArrowUpRight size={15} /></button>
+        <button className="menu-trigger" onClick={() => setMobileOpen(!mobileOpen)} aria-expanded={mobileOpen} aria-label={mobileOpen ? "Close navigation" : "Open navigation"}>{mobileOpen ? <X size={24} /> : <Menu size={24} />}</button>
+      </header>
+      <div className={`mobile-nav ${mobileOpen ? "open" : ""}`} aria-hidden={!mobileOpen}>
+        <div className="mobile-nav-inner"><span className="eyebrow">Atelier Beauty · New York</span><div className="mobile-links"><button onClick={() => scrollTo("home")}>Home</button>{navItems.map((item, index) => <button key={item} style={{ "--i": index } as React.CSSProperties} onClick={() => scrollTo(item === "Our Team" ? "team" : item.toLowerCase())}>{item}</button>)}</div><button className="button button-dark" onClick={() => openBooking()}>Book an appointment <ArrowUpRight size={16} /></button></div>
+      </div>
+
       <main>
-        {/* Example: lucide-react for icons */}
-        <Loader2 className="animate-spin" />
-        Example Page
-        {/* Example: Streamdown for markdown rendering */}
-        <Streamdown>Any **markdown** content</Streamdown>
-        <Button variant="default">Example Button</Button>
+        <section id="home" className="hero-section">
+          <div className="hero-copy"><Reveal><span className="eyebrow">A considered beauty studio · Est. 2014</span></Reveal><Reveal delay={80}><h1>Beauty,<br /><i>refined.</i></h1></Reveal><Reveal delay={160}><p>Where expert care, modern beauty and timeless elegance come together.</p></Reveal><Reveal delay={230}><div className="hero-actions"><button className="button button-light" onClick={() => openBooking()}>Book an appointment <ArrowUpRight size={16} /></button><button className="text-link light-link" onClick={() => scrollTo("services")}>Explore services <ArrowRight size={16} /></button></div></Reveal></div>
+          <div className="hero-visual"><img src={generated.hero} alt="Woman with softly styled hair and luminous natural makeup" /><div className="hero-note"><span className="note-line" /><span>Beauty rituals<br />made personal</span></div></div>
+          <div className="hero-side-label">01 / 08 <span>Scroll to discover</span><ArrowDown size={15} /></div><div className="hero-crest" aria-hidden="true"><div><img src={generated.mark} alt="" /></div><span>Atelier<br /><i>Beauty</i></span></div>
+        </section>
+
+        <section id="about" className="intro-section section-pad">
+          <div className="container intro-grid"><Reveal className="intro-image-wrap"><img src={generated.studio} alt="Warmly lit Atelier Beauty salon interior" /><span className="image-caption">The Atelier · No. 01</span></Reveal><Reveal className="intro-copy" delay={100}><span className="eyebrow">The art of beauty</span><h2>Where every<br /><i>detail matters.</i></h2><p>Atelier Beauty is a warm, quietly confident space for expert hair, skin, makeup and bridal artistry. We take the time to understand what makes you feel like yourself — then refine every detail around it.</p><p>Come for the result. Stay for the ritual.</p><button className="text-link" onClick={() => scrollTo("team")}>Discover our story <ArrowRight size={16} /></button><div className="stat-row"><div><strong>10<span>+</span></strong><small>Years<br />experience</small></div><div><strong>5k<span>+</span></strong><small>Clients<br />cared for</small></div><div><strong>20<span>+</span></strong><small>Beauty<br />rituals</small></div></div></Reveal></div>
+        </section>
+
+        <section id="services" className="services-overview section-pad section-cream">
+          <div className="container"><div className="section-heading split-heading"><Reveal><span className="eyebrow">02 / The menu</span><h2>Our <i>services</i></h2></Reveal><Reveal delay={100}><p>Everything you need to look, feel and glow your absolute best — thoughtfully edited, beautifully delivered.</p></Reveal></div><Reveal className="category-rail" delay={160}>{categories.slice(1).map((category, index) => <button key={category} onClick={() => { setSelectedCategory(category); scrollTo(`${category.toLowerCase()}-studio`); }}><span>0{index + 1}</span>{category}<ArrowUpRight size={14} /></button>)}</Reveal></div>
+        </section>
+
+        <ServiceSection id="hair-studio" number="03" eyebrow="Hair studio" title={<>The shape of<br /><i>confidence.</i></>} intro="Cuts, color and finish work designed around the way you move through the world." anchorImage={img("photo-1522337360788-8b13dee7a37e")} services={featuredServices} onDetails={setSelectedService} onBook={openBooking} />
+        <ServiceSection id="skin-studio" number="04" eyebrow="Skin & facial studio" title={<>A softer kind<br /><i>of glow.</i></>} intro="Modern skin care with a calm, considered approach to your natural radiance." anchorImage={generated.ritual} services={skinServices} reverse onDetails={setSelectedService} onBook={openBooking} />
+        <ServiceSection id="makeup-studio" number="05" eyebrow="Makeup studio" title={<>Make an<br /><i>entrance.</i></>} intro="Artistry that meets you where you are — from soft definition to full celebration." anchorImage={img("photo-1515886657613-9f3515b0c78f")} services={makeupServices} onDetails={setSelectedService} onBook={openBooking} />
+
+        <section id="bridal" className="bridal-section">
+          <div className="bridal-image"><img src={generated.bridal} alt="Bride in ivory and champagne bridal styling" /></div><div className="bridal-overlay" /><div className="container bridal-content"><Reveal><span className="eyebrow light-eyebrow">06 / The bridal atelier</span><h2>Your most<br /><i>beautiful day.</i></h2><p>Bridal beauty created around you — with a calm plan, a skilled hand, and room for the little moments.</p><button className="button button-light" onClick={() => openBooking(services.find((s) => s.id === "bridal-package"))}>Schedule bridal consultation <ArrowUpRight size={16} /></button></Reveal></div><div className="bridal-stamp">Atelier<br />Bridal</div>
+        </section>
+        <section className="bridal-services section-pad"><div className="container bridal-service-grid">{services.filter((service) => service.category === "Bridal").map((service, index) => <Reveal key={service.id} delay={index * 70}><button className="bridal-service" onClick={() => setSelectedService(service)}><span className="service-index">0{index + 1}</span><span><strong>{service.title}</strong><small>{service.duration} · {service.price}</small></span><ArrowUpRight size={18} /></button></Reveal>)}</div></section>
+
+        <section id="nails-studio" className="nails-section section-pad section-blush"><div className="container nails-grid"><Reveal className="nails-copy"><span className="eyebrow">07 / Nails & hands</span><h2>Small details.<br /><i>Lasting impression.</i></h2><p>Clean shaping, beautiful color and expressive details — finished with the same care as every Atelier ritual.</p><button className="text-link" onClick={() => { setSelectedCategory("Nails"); scrollTo("menu"); }}>See nail services <ArrowRight size={16} /></button></Reveal><div className="nail-feature"><Reveal><img src={img("photo-1512496015851-a90fb38ba796")} alt="Minimal neutral manicure close-up" /><span className="image-caption">The finishing touch</span></Reveal><Reveal className="nail-mini" delay={120}><img src={img("photo-1525507119028-ed4c629a60a3")} alt="Glossy gel nail detail" /></Reveal></div></div></section>
+
+        <section id="spa-studio" className="spa-section"><img src={generated.ritual} alt="Quiet facial ritual in a softly lit treatment room" /><div className="spa-overlay" /><div className="container spa-content"><Reveal><span className="eyebrow light-eyebrow">08 / Spa & relaxation</span><h2>Let the day<br /><i>soften around you.</i></h2><p>Slow, grounding rituals for the moments when beauty means taking a breath.</p><button className="button button-light" onClick={() => { setSelectedCategory("Spa"); scrollTo("menu"); }}>Explore spa rituals <ArrowUpRight size={16} /></button></Reveal></div></section>
+
+        <section id="menu" className="menu-section section-pad"><div className="container"><div className="section-heading menu-heading"><Reveal><span className="eyebrow">The complete menu</span><h2>Choose your<br /><i>ritual.</i></h2></Reveal><Reveal delay={100}><p>Starting prices are a guide. Every appointment begins with a thoughtful consultation.</p></Reveal></div><Reveal className="menu-tabs" delay={160}>{categories.map((category) => <button className={selectedCategory === category ? "active" : ""} key={category} onClick={() => setSelectedCategory(category)}>{category}</button>)}</Reveal><div className="menu-list">{filteredServices.map((service, index) => <Reveal key={service.id} delay={Math.min(index, 5) * 35}><div className="menu-row"><span className="menu-number">{String(index + 1).padStart(2, "0")}</span><div className="menu-service-name"><strong>{service.title}</strong><small>{service.category}</small></div><span className="menu-duration"><Clock3 size={14} /> {service.duration}</span><span className="menu-price">{service.price}</span><button className="menu-book" onClick={() => openBooking(service)}>Book <ArrowUpRight size={14} /></button></div></Reveal>)}</div></div></section>
+
+        <section className="why-section section-pad"><div className="why-image"><img src={generated.studio} alt="Sunlit salon styling station" /></div><div className="why-overlay" /><div className="container why-content"><Reveal><span className="eyebrow light-eyebrow">The Atelier difference</span><h2>Care you can<br /><i>feel.</i></h2></Reveal><div className="why-list">{["Experienced professionals", "Premium products", "Personalized care", "Relaxing environment"].map((item, index) => <Reveal key={item} delay={index * 70}><div className="why-item"><span>0{index + 1}</span><div><strong>{item}</strong><p>{["Artists who listen first, then make their mark.", "Thoughtful formulas selected for beautiful results.", "No two appointments are designed exactly alike.", "A studio pace that leaves room to exhale."][index]}</p></div><Sparkles size={16} /></div></Reveal>)}</div></div></section>
+
+        <section className="transformation-section section-pad section-cream"><div className="container"><div className="section-heading split-heading"><Reveal><span className="eyebrow">A little perspective</span><h2>Before &<br /><i>after.</i></h2></Reveal><Reveal delay={100}><p>See the difference a considered approach can make. Drag the line to explore the transformation.</p></Reveal></div><Reveal className="comparison" delay={160}><div className="comparison-after"><img src={img("photo-1529139574466-a303027c1d8b")} alt="After: softly styled polished beauty look" /></div><div className="comparison-before" style={{ width: `${beforePosition}%` }}><img src={img("photo-1508214751196-bcfd4ca60f91")} alt="Before: natural beauty look" /></div><div className="comparison-line" style={{ left: `${beforePosition}%` }}><span><ChevronLeft size={13} /><ChevronRight size={13} /></span></div><input className="comparison-range" type="range" min="10" max="90" value={beforePosition} onChange={(event) => setBeforePosition(Number(event.target.value))} aria-label="Before and after comparison slider" /><div className="comparison-labels"><span>Before</span><span>After</span></div></Reveal></div></section>
+
+        <section id="gallery" className="gallery-section section-pad"><div className="container"><div className="section-heading split-heading"><Reveal><span className="eyebrow">The beauty journal</span><h2>Seen at<br /><i>the atelier.</i></h2></Reveal><Reveal delay={100}><p>A glimpse into the hands, faces, rituals and details that make the studio feel like ours.</p></Reveal></div><div className="gallery-masonry">{gallery.map((item, index) => <Reveal key={`${item.label}-${index}`} className={`gallery-item ${item.tall ? "tall" : ""}`} delay={(index % 5) * 45}><button onClick={() => setLightboxIndex(index)} aria-label={`View ${item.label} image`}><img src={item.src} alt={item.label} loading="lazy" /><span className="gallery-hover"><span>{item.label}</span><ArrowUpRight size={15} /></span></button></Reveal>)}</div></div></section>
+
+        <section id="team" className="team-section section-pad section-cream"><div className="container"><div className="section-heading split-heading"><Reveal><span className="eyebrow">The people behind the ritual</span><h2>Meet our<br /><i>beauty experts.</i></h2></Reveal><Reveal delay={100}><p>Small team, deep expertise, and a shared belief that the best beauty work begins with attention.</p></Reveal></div><div className="team-grid">{[{ name: "Sarah Khan", role: "Senior Makeup Artist", specialty: "Bridal & editorial", image: img("photo-1544005313-94ddf0286df2") }, { name: "Mia Laurent", role: "Colorist & Stylist", specialty: "Dimensional color", image: img("photo-1531123897727-8f129e1688ce") }, { name: "Noor Patel", role: "Skin Therapist", specialty: "Facial rituals", image: img("photo-1506794778202-cad84cf45f1d") }].map((member, index) => <Reveal key={member.name} delay={index * 90}><article className="team-card"><div className="team-photo"><img src={member.image} alt={member.name} loading="lazy" /><span className="team-social"><Instagram size={16} /></span></div><div className="team-meta"><strong>{member.name}</strong><span>{member.role}</span><small>{member.specialty} · {index === 0 ? "12" : index === 1 ? "10" : "8"} years</small></div></article></Reveal>)}</div></div></section>
+
+        <section className="stories-section section-pad"><div className="container stories-layout"><Reveal><span className="eyebrow">Client stories</span><h2>Beautifully<br /><i>considered.</i></h2><p className="stories-note">We share client words only with permission. Your story could be featured here after your visit.</p></Reveal><div className="story-panel"><div className="story-quote-mark">“</div><div className="story-placeholder"><span>Private by design</span><p>Real experiences, shared thoughtfully — coming soon.</p></div><div className="story-controls"><button onClick={() => setTestimonialIndex(Math.max(0, testimonialIndex - 1))} disabled={testimonialIndex === 0} aria-label="Previous story"><ChevronLeft size={16} /></button><span>0{testimonialIndex + 1} / 03</span><button onClick={() => setTestimonialIndex(Math.min(2, testimonialIndex + 1))} disabled={testimonialIndex === 2} aria-label="Next story"><ChevronRight size={16} /></button></div></div></div></section>
+
+        <section className="offers-section section-pad section-blush"><div className="container"><div className="section-heading split-heading"><Reveal><span className="eyebrow">Atelier notes</span><h2>Little reasons<br /><i>to visit.</i></h2></Reveal><Reveal delay={100}><p>Seasonal ways to make a little more room for yourself — presented with the same care as our rituals.</p></Reveal></div><div className="offers-grid"><Reveal><article className="offer-card offer-dark"><span className="eyebrow light-eyebrow">A private welcome</span><strong>Begin with<br /><i>the ritual.</i></strong><p>New clients receive 15% off their first visit — a warm welcome into the Atelier.</p><button onClick={() => openBooking()}>Reserve your welcome <ArrowUpRight size={15} /></button></article></Reveal><Reveal delay={90}><article className="offer-card offer-image"><img src={generated.ritual} alt="Quiet beauty ritual detail" /><div><span className="eyebrow light-eyebrow">For the almost-weds</span><strong>Bridal beauty<br /><i>package.</i></strong><button onClick={() => openBooking(services.find((s) => s.id === "bridal-package"))}>Start a consultation <ArrowUpRight size={15} /></button></div></article></Reveal></div></div></section>
+
+        <section id="booking" className="booking-section section-pad"><div className="container booking-grid"><Reveal className="booking-copy"><span className="eyebrow">Make it yours</span><h2>Ready for your<br /><i>beauty appointment?</i></h2><p>Tell us what you have in mind. Our studio team will be in touch to shape the right appointment for you.</p><div className="booking-contact"><a href="tel:+12125550148"><Phone size={16} /> Call us <span>(212) 555-0148</span></a><a href="https://wa.me/12125550148" target="_blank" rel="noreferrer"><Sparkles size={16} /> WhatsApp us <span>Message the studio</span></a></div></Reveal><Reveal className="booking-form-wrap" delay={120}><form className="booking-form" onSubmit={(event) => { event.preventDefault(); setSubmitted(true); }}><div className="form-intro"><span>Appointment request</span>{selectedService && <small>Requesting: <strong>{selectedService.title}</strong></small>}</div><div className="form-row"><label>Name<input required name="name" placeholder="Your name" /></label><label>Phone<input required name="phone" type="tel" placeholder="(212) 555-0148" /></label></div><div className="form-row"><label>Email<input required name="email" type="email" placeholder="you@email.com" /></label><label>Service<select name="service" defaultValue={selectedService?.id || ""}><option value="" disabled>Select a service</option>{services.map((service) => <option value={service.id} key={service.id}>{service.title} · {service.price}</option>)}</select></label></div><div className="form-row"><label>Preferred date<input required name="date" type="date" /></label><label>Preferred time<select name="time" defaultValue=""><option value="" disabled>Select a time</option><option>10:00 AM</option><option>12:30 PM</option><option>3:00 PM</option><option>5:30 PM</option></select></label></div><label>Message<textarea name="message" rows={3} placeholder="Tell us a little about what you are looking for..." /></label><button className="button button-dark form-submit" type="submit">{submitted ? <>Request received <Check size={16} /></> : <>Request appointment <ArrowUpRight size={16} /></>}</button>{submitted && <p className="form-success">Thank you — your request is ready for the studio team. We’ll be in touch shortly.</p>}</form></Reveal></div></section>
+
+        <section id="contact" className="contact-section"><div className="contact-image"><img src={generated.studio} alt="Atelier Beauty styling station" /></div><div className="container contact-grid"><Reveal><span className="eyebrow">Visit our studio</span><h2>Come in,<br /><i>stay awhile.</i></h2><div className="contact-details"><div><MapPin size={16} /><p>18 Mercer Street<br />New York, NY 10013</p></div><div><Clock3 size={16} /><p>Monday – Saturday<br />10:00 AM – 8:00 PM<br /><span>Sunday · By appointment</span></p></div><div><Mail size={16} /><p>hello@atelierbeauty.studio<br />@atelierbeauty</p></div></div><a className="text-link" href="https://maps.google.com/?q=18+Mercer+Street+New+York+NY" target="_blank" rel="noreferrer">Open in maps <ArrowUpRight size={16} /></a></Reveal></div></section>
+
+        <section className="journal-strip section-pad section-cream"><div className="container journal-heading"><Reveal><span className="eyebrow">Follow our beauty journal</span><h2>@atelierbeauty</h2></Reveal><Reveal delay={100}><a className="text-link" href="https://instagram.com" target="_blank" rel="noreferrer">Follow us <Instagram size={16} /></a></Reveal></div><div className="journal-grid">{gallery.slice(2, 8).map((item, index) => <a href="https://instagram.com" target="_blank" rel="noreferrer" key={index} aria-label={`View ${item.label} on Instagram`}><img src={item.src} alt={item.label} loading="lazy" /></a>)}</div></section>
       </main>
+
+      <footer className="site-footer"><div className="container footer-grid"><div className="footer-brand"><button className="brand-lockup footer-lockup" onClick={() => scrollTo("home")}><img src={generated.mark} alt="" /><span>ATELIER<br /><em>BEAUTY</em></span></button><p>Expert care, modern beauty,<br />timeless elegance.</p><a href="mailto:hello@atelierbeauty.studio">hello@atelierbeauty.studio</a></div><div className="footer-links"><div><span className="footer-label">Explore</span><button onClick={() => scrollTo("about")}>About</button><button onClick={() => scrollTo("services")}>Services</button><button onClick={() => scrollTo("gallery")}>Gallery</button><button onClick={() => scrollTo("bridal")}>Bridal</button></div><div><span className="footer-label">Services</span><button onClick={() => { setSelectedCategory("Hair"); scrollTo("menu"); }}>Hair</button><button onClick={() => { setSelectedCategory("Makeup"); scrollTo("menu"); }}>Makeup</button><button onClick={() => { setSelectedCategory("Skin"); scrollTo("menu"); }}>Skin</button><button onClick={() => { setSelectedCategory("Spa"); scrollTo("menu"); }}>Spa</button></div><div><span className="footer-label">Find us</span><a href="https://instagram.com" target="_blank" rel="noreferrer">Instagram <ArrowUpRight size={13} /></a><a href="tel:+12125550148">(212) 555-0148</a><a href="https://maps.google.com/?q=18+Mercer+Street+New+York+NY" target="_blank" rel="noreferrer">18 Mercer Street <ArrowUpRight size={13} /></a></div></div><div className="footer-newsletter"><span className="footer-label">The Atelier letter</span><p>Occasional notes on beauty, rituals and studio news.</p><form onSubmit={(event) => event.preventDefault()}><input type="email" aria-label="Email for Atelier letter" placeholder="Your email address" /><button aria-label="Subscribe"><ArrowRight size={16} /></button></form></div></div><div className="container footer-bottom"><span>© 2026 Atelier Beauty Studio</span><span>Made with care in New York</span><button onClick={() => scrollTo("home")}>Back to top <ArrowUp size={14} /></button></div></footer>
+
+      {selectedService && <div className="modal-backdrop" role="presentation" onClick={() => setSelectedService(null)}><aside className="service-modal" role="dialog" aria-modal="true" aria-label={`${selectedService.title} details`} onClick={(event) => event.stopPropagation()}><button className="modal-close" onClick={() => setSelectedService(null)} aria-label="Close service details"><X size={18} /></button><div className="modal-image"><img src={selectedService.image} alt={selectedService.title} /></div><div className="modal-content"><span className="eyebrow">{selectedService.category} · {selectedService.duration}</span><h2>{selectedService.title}</h2><p>{selectedService.description}</p><div className="modal-facts"><div><span>Duration</span><strong>{selectedService.duration}</strong></div><div><span>Starting price</span><strong>{selectedService.price}</strong></div></div><div className="modal-benefits"><span className="footer-label">The ritual includes</span>{selectedService.benefits.map((benefit) => <span key={benefit}><Check size={14} /> {benefit}</span>)}</div><p className="modal-prep"><strong>Before you arrive</strong>{selectedService.preparation}</p><button className="button button-dark" onClick={() => { setSelectedService(null); openBooking(selectedService); }}>Book this service <ArrowUpRight size={16} /></button></div></aside></div>}
+      {lightboxItem && lightboxIndex !== null && <div className="lightbox" role="dialog" aria-modal="true" aria-label="Gallery image viewer" onClick={() => setLightboxIndex(null)}><button className="lightbox-close" onClick={() => setLightboxIndex(null)} aria-label="Close gallery"><X size={20} /></button><button className="lightbox-arrow left" onClick={(event) => { event.stopPropagation(); setLightboxIndex((lightboxIndex - 1 + gallery.length) % gallery.length); }} aria-label="Previous image"><ChevronLeft size={24} /></button><figure onClick={(event) => event.stopPropagation()}><img src={lightboxItem.src} alt={lightboxItem.label} /><figcaption><span>{lightboxItem.label}</span><small>{lightboxIndex + 1} / {gallery.length}</small></figcaption></figure><button className="lightbox-arrow right" onClick={(event) => { event.stopPropagation(); setLightboxIndex((lightboxIndex + 1) % gallery.length); }} aria-label="Next image"><ChevronRight size={24} /></button></div>}
     </div>
   );
+}
+
+function ServiceSection({ id, number, eyebrow, title, intro, anchorImage, services, reverse = false, onDetails, onBook }: { id: string; number: string; eyebrow: string; title: React.ReactNode; intro: string; anchorImage: string; services: Service[]; reverse?: boolean; onDetails: (service: Service) => void; onBook: (service: Service) => void }) {
+  return <section id={id} className={`service-section section-pad ${reverse ? "reverse" : ""}`}><div className="container"><span className="section-number-mark" aria-hidden="true">{number}</span><div className="service-intro"><Reveal><span className="eyebrow">{number} / {eyebrow}</span><h2>{title}</h2><p>{intro}</p><button className="text-link" onClick={() => onDetails(services[0])}>View the edit <ArrowRight size={16} /></button></Reveal><Reveal className="service-anchor-image" delay={100}><img src={anchorImage} alt={`${eyebrow} at Atelier Beauty`} loading="lazy" /><span className="image-caption">Atelier Beauty · {number}</span></Reveal></div><div className="service-list">{services.map((service, index) => <Reveal key={service.id} delay={index * 60}><article className="service-item"><div className="service-thumb"><img src={service.image} alt={service.title} loading="lazy" /></div><div className="service-info"><span className="service-index">0{index + 1}</span><div><h3>{service.title}</h3><p>{service.description}</p><div className="service-meta"><span><Clock3 size={13} /> {service.duration}</span><span>{service.price}</span></div></div></div><div className="service-actions"><button onClick={() => onBook(service)}>Book now <ArrowUpRight size={15} /></button><button onClick={() => onDetails(service)}>View details <ArrowRight size={15} /></button></div></article></Reveal>)}</div></div></section>;
 }
