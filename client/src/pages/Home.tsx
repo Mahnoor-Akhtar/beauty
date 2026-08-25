@@ -41,40 +41,41 @@ const img = (id: string, width = 1200) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=88`;
 
 const uploaded = {
-  partyMakeup: "/manus-storage/pasted_file_5Ar9Qg_image_b7987778.png",
-  bridalGallery: "/manus-storage/pasted_file_5mYQ4r_image_84ae57d7.png",
-  pedicure: "/manus-storage/pasted_file_9pggqG_image_bf368563.png",
-  balayage: "/manus-storage/pasted_file_BHzXaa_image_5e60744e.png",
-  bridalPackage: "/manus-storage/pasted_file_DxPdFe_image_b2832827.png",
-  threading: "/manus-storage/pasted_file_E7fCJo_image_b0768921.png",
-  waxing: "/manus-storage/pasted_file_EJZirw_image_f725e058.png",
-  signatureFacial: "/manus-storage/pasted_file_EplSOq_image_428858db.png",
-  bridalMakeup: "/manus-storage/pasted_file_FX4L45_image_f2231e0a.png",
-  bridalPortrait: "/manus-storage/pasted_file_M1PNcb_image_bf9ee7bb.png",
-  colorStudy: "/manus-storage/pasted_file_NW4cHj_image_22980585.png",
-  blondePortrait: "/manus-storage/pasted_file_TUo6hZ_image_78965a07.png",
-  eyeDesign: "/manus-storage/pasted_file_TxL1wM_image_9dc8ed8e.png",
-  keratin: "/manus-storage/pasted_file_Vx04y3_image_978cf372.png",
-  headMassage: "/manus-storage/pasted_file_cKGCUm_image_52d6f802.png",
-  skinCleanup: "/manus-storage/pasted_file_dCulO3_image_04f4a7e3.png",
-  browLamination: "/manus-storage/pasted_file_dDBgOW_image_deffcfb7.png",
-  lashes: "/manus-storage/pasted_file_hfoaiL_image_37dc0a2d.webp",
-  treatmentRoom: "/manus-storage/pasted_file_iE8IlZ_image_2c321ccd.png",
-  eyeCloseup: "/manus-storage/pasted_file_iSCcac_image_7098e435.png",
-  haircut: "/manus-storage/pasted_file_ikpWPA_image_f0e91989.png",
-  manicure: "/manus-storage/pasted_file_l7vh59_image_3fe17c9b.png",
-  nailArt: "/manus-storage/pasted_file_n0yKdE_image_7c54ca4e.png",
-  colorHair: "/manus-storage/pasted_file_peMtb6_image_a185f5c2.png",
-  hairPortrait: "/manus-storage/pasted_file_qNMMgh_image_6fc2490e.png",
-  bridalHair: "/manus-storage/pasted_file_qf8LUo_image_e49d579f.png",
-  hairFinish: "/manus-storage/pasted_file_r9Y4Ul_image_88a0e5e7.png",
-  hairSpa: "/manus-storage/pasted_file_vKXsWJ_image_10d9dd5f.png",
-  hydra: "/manus-storage/pasted_file_xP8Dh2_image_75d7166d.png",
-  expertMakeup: "/manus-storage/pasted_file_hqqDxA_image_7e6a94c3.png",
-  expertInAction: "/manus-storage/pasted_file_HmlGst_image_97ec22fa.png",
-  expertStylist: "/manus-storage/pasted_file_kP8Oub_image_630e5bf9.png",
-  withoutMakeup: "/manus-storage/pasted_file_QJC3M4_image_70d1976c.png",
-  withMakeup: "/manus-storage/pasted_file_hZzmWp_image_2ebc35f4.png",
+  partyMakeup: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/DRjzQLEGaBOygXxZ.png",
+  bridalGallery: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/xoxMiwTGsMoVcTmJ.png",
+  pedicure: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/DRzUunxVyOzffgjl.png",
+  balayage: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/JcBfcLfEGBImihPH.png",
+  bridalPackage: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/qyLeNJswirZWSIlb.png",
+  threading: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/sGasjhhkcoaHvozI.png",
+  waxing: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/HGuKbtEbXRkCxMbM.png",
+  signatureFacial: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/SLbvCfRvlvKDKqbX.png",
+  bridalMakeup: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/nvQQoSujhlBuImkq.png",
+  bridalPortrait: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/JqAlJCmflyNLppWt.png",
+  colorStudy: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/IShukhFOvXlwcVAD.png",
+  blondePortrait: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/ZdIUhDaNPfXwAcrX.png",
+  eyeDesign: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/mGAMbSeKXPpDRpWm.png",
+  keratin: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/kTBJJRhywGiHMAIs.png",
+  headMassage: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/UmWDTcJzIFclbnpz.png",
+  skinCleanup: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/zHbXKZTcoRHDCmQE.png",
+  browLamination: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/oVrvBNZZnAPkaxUl.png",
+  lashes: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/mshTLAEdfVnfeSRU.webp",
+  treatmentRoom: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/GIJsNBhOhbYZVWpP.png",
+  eyeCloseup: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/CTsCyUKinLwAwZfh.png",
+  haircut: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/bjanjxiDFDfIGMXQ.png",
+  manicure: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/eWPYAoJrPiiowMTr.png",
+  nailArt: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/FExyjiusWGacNlBf.png",
+  colorHair: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/yJQRBfUtgWFOHQDw.png",
+  hairPortrait: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/iIMVCpNeamQHayqi.png",
+  bridalHair: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/ttcAkcumBHKlxzzI.png",
+  hairFinish: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/rtrznINURLiXiuRj.png",
+  hairSpa: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/KLjKkFqwflacDFWC.png",
+  hydra: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/SSbnGkmbTttwWybK.png",
+  expertMakeup: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/QWAZOWBKygACLwAu.png",
+  expertInAction: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/KCHAFSmmcOpcHyIW.png",
+  expertStylist: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/DABSBwnUHEKuFLBH.png",
+  withoutMakeup: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/UoeXgqSlyRvoxXif.png",
+  withMakeup: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/MFFhaqXmjxxdNvgh.png",
+  heroPortrait: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663909008811/JbVoxvfogvCumNCM.png",
 };
 
 const services: Service[] = [
@@ -199,8 +200,7 @@ export default function Home() {
       <main>
         <section id="home" className="hero-section">
           <div className="hero-copy"><Reveal><span className="eyebrow">A considered beauty studio · Est. 2014</span></Reveal><Reveal delay={80}><h1>Beauty,<br /><i>refined.</i></h1></Reveal><Reveal delay={160}><p>Where expert care, modern beauty and timeless elegance come together.</p></Reveal><Reveal delay={230}><div className="hero-actions"><button className="button button-light" onClick={() => openBooking()}>Book an appointment <ArrowUpRight size={16} /></button><button className="text-link light-link" onClick={() => scrollTo("services")}>Explore services <ArrowRight size={16} /></button></div></Reveal></div>
-          <div className="hero-visual"><img src={uploaded.blondePortrait} alt="Uploaded beauty portrait with softly styled hair and luminous makeup" /><div className="hero-note"><span className="note-line" /><span>Beauty rituals<br />made personal</span></div></div>
-          <div className="hero-side-label">01 / 08 <span>Scroll to discover</span><ArrowDown size={15} /></div><div className="hero-crest" aria-hidden="true"><div><span className="brand-symbol" aria-hidden="true">A</span></div><span>Atelier<br /><i>Beauty</i></span></div>
+          <div className="hero-visual"><img src={uploaded.heroPortrait} alt="Uploaded beauty portrait with a refined bob haircut and luminous makeup" /></div>
         </section>
 
         <section id="about" className="intro-section section-pad">

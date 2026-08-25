@@ -49,3 +49,28 @@
 - [x] Replace failed photo references with user-provided uploaded assets.
 - [x] Remove or replace any failed logo-generation reference.
 - [x] Verify the full page and save a checkpoint.
+
+## Updated After portrait
+
+- [x] Upload the new bridal makeup portrait.
+- [x] Replace the Before & After “After” source and keep the full portrait visible.
+- [x] Verify the comparison on desktop and mobile, then save a checkpoint.
+
+## Hero portrait replacement
+
+- [ ] Upload the new hero portrait for project use.
+- [ ] Replace the hero image source and update its alternative text.
+- [ ] Verify desktop and mobile hero rendering, then save a checkpoint.
+
+## Hero overlay cleanup
+
+- [x] Remove the logo and decorative text overlays from the hero image.
+- [x] Keep the main headline, description, and booking actions readable.
+- [x] Verify desktop and mobile hero spacing, then save a checkpoint.
+
+## Public assets for Vercel
+
+- [x] Audit every uploaded asset referenced by the frontend.
+- [x] Upload all uploaded assets with public access.
+- [x] Replace Manus-only storage paths with public URLs.
+- [x] Verify public asset reachability and the Vercel-ready production build.
